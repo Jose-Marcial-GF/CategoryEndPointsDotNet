@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using ApiEcommerce.Model.Dtos;
 using ApiEcommerce.Repository.IRepository;
 using AutoMapper;
@@ -111,6 +112,35 @@ namespace ApiEcommerce.Controllers
             if (!_categoryRepository.UpdateCategory(category))
             {
                 ModelState.AddModelError("CustomError", $"Algo salió mal {category}");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+
+        [HttpDelete("{id:int}", Name = "DeleteCategory")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public  IActionResult DeleteCategory(int id)
+        {
+            if(!_categoryRepository.Exists(id))
+            {
+                ModelState.AddModelError("CustomError", "La categoría no existe");
+                return StatusCode(404, ModelState);
+            }
+            Category? category = _categoryRepository.GetCategory(id);
+            if(category == null)
+            {
+                ModelState.AddModelError("CustomError", "La categoría no existe");
+                return StatusCode(404, ModelState); 
+            }
+            if (!_categoryRepository.DeleteCategory(category))
+            {
+                ModelState.AddModelError("CustomError", $"Algo salió mal al eliminar {category}");
                 return StatusCode(500, ModelState);
             }
 
