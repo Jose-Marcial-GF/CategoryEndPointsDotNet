@@ -16,34 +16,34 @@ public class CategoryRepositoy : ICategoryRepository
 
     public bool Exists(int id)
     {
-        return _db.Catetories.Any(category => category.Id == id);
+        return _db.Categories.Any(category => category.Id == id);
     }
 
     public bool Exists(string name)
     {
-        return _db.Catetories.Any(category => category.Name.ToLower().Trim() == name.Trim());
+        return _db.Categories.Any(category => category.Name.ToLower().Trim() == name.Trim());
     }
 
     public bool CreateCategory(Category category)
     {
         category.CreatedAt = DateTime.Now;
-        _db.Catetories.Add(category);
+        _db.Categories.Add(category);
         return Save();
     }
 
     public bool DeleteCategory(Category catetory)
     {
-        _db.Catetories.Remove(catetory);
+        _db.Categories.Remove(catetory);
         return Save();
     }
-    public ICollection<Category> GetCatetories()
+    public ICollection<Category> GetCategories()
     {
-        return _db.Catetories.OrderBy(category => category.Name).ToList();
+        return _db.Categories.OrderBy(category => category.Name).ToList();
     }
 
-    public Category GetCategory(int id)
+    public Category? GetCategory(int id)
     {
-        return _db.Catetories.FirstOrDefault(category => category.Id == id) ?? throw new InvalidOperationException($"No se ha encontrado categoría con id: {id}");
+        return _db.Categories.FirstOrDefault(category => category.Id == id);
     }
 
     public bool Save()
@@ -54,7 +54,7 @@ public class CategoryRepositoy : ICategoryRepository
     public bool UpdateCategory(Category catetory)
     {
         catetory.CreatedAt = DateTime.Now;
-        _db.Catetories.Update(catetory);
+        _db.Categories.Update(catetory);
         return Save();
     }
 }

@@ -7,6 +7,6 @@ public class AplicationDbContext: DbContext
         
     }
 
-    public DbSet<Category> Catetories { get; set; }
+    public DbSet<Category> Categories { get; set; }
     
 }
