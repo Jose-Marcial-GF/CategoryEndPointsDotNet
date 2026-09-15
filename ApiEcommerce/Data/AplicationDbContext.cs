@@ -1,12 +1,14 @@
+using ApiEcommerce.Model;
 using Microsoft.EntityFrameworkCore;
 
-public class AplicationDbContext: DbContext
+public class ApplicationDbContext: DbContext
 {
-    public AplicationDbContext(DbContextOptions<AplicationDbContext> options): base (options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base (options)
     {
         
     }
 
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Product> Products { get; set; }
     
 }

@@ -12,7 +12,10 @@ public class Product
     [Required]
     public string Name { get; set; } = string.Empty;
 
+    public string Description { get; set; } = string.Empty;
+
     [Range(0, double.MaxValue)]
+    [Column(TypeName ="decimal(18,2)")]
     public Decimal Price { get; set; }
 
     public string ImageUrl { get; set; } = string.Empty;
@@ -26,6 +29,6 @@ public class Product
     public DateTime? UpdateTime { get; set; } = null;
 
     public int CategoryId { get; set; }
-    [ForeignKey("id")]
+    [ForeignKey("CategoryId")]
     public required Category Category { get; set; }
 }
