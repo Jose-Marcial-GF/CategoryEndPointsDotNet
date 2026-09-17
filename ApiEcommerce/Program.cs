@@ -2,6 +2,7 @@ using System.Text;
 using ApiEcommerce.Constants;
 using ApiEcommerce.Repository;
 using ApiEcommerce.Repository.IRepository;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +58,19 @@ builder.Services.AddControllers(options =>
 });
 
 
+builder.Services.AddApiVersioning(option =>
+{
+    option.AssumeDefaultVersionWhenUnspecified = true;
+    option.DefaultApiVersion = new ApiVersion(1, 0);
+    option.ReportApiVersions = true;
+
+}).AddApiExplorer(option =>
+{
+    option.GroupNameFormat ="'v'VVV";
+    option.SubstituteApiVersionInUrl = true;
+});
+
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddCors(options =>
 {
@@ -94,6 +108,41 @@ builder.Services.AddSwaggerGen(options =>
             new string[] {}
         }
     });
+
+    options.SwaggerDoc("v1", new OpenApiInfo()
+    {
+         Version = "v1",
+         Title = "API Ecommerce",
+         Description = "API para gestionar productos y usuarios",
+         TermsOfService = new Uri("http://example.com/terms"),
+         Contact = new OpenApiContact()
+         {
+            Name = "4w4kt",
+            Url = new Uri("http://4w4kt.com")
+         },
+         License = new OpenApiLicense()
+         {
+             Name = "License de uso",
+             Url = new Uri("http://example.com/license")
+         }
+    });
+    options.SwaggerDoc("v2", new OpenApiInfo()
+    {
+         Version = "v2",
+         Title = "API Ecommerce",
+         Description = "API para gestionar productos y usuarios",
+         TermsOfService = new Uri("http://example.com/terms"),
+         Contact = new OpenApiContact()
+         {
+            Name = "4w4kt",
+            Url = new Uri("http://4w4kt.com")
+         },
+         License = new OpenApiLicense()
+         {
+             Name = "License de uso",
+             Url = new Uri("http://example.com/license")
+         }
+    });
 });
 
 
@@ -102,7 +151,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "v2");
+    });
 }
 
 app.UseHttpsRedirection();

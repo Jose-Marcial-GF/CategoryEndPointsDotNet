@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ApiEcommerce.Constants;
+using Asp.Versioning;
 
 namespace ApiEcommerce.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     [Authorize(Roles = Roles.Admin)]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersionNeutral]
+    [ApiController]
     public class UserController : ControllerBase{
     public readonly IMapper _mapper;
     public readonly IUserRepository _userRepository;
