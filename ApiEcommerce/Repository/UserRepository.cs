@@ -31,12 +31,10 @@ public class UserRepository : IUserRepository
         return _db.Users.OrderBy(user => user.Name).ToList();
     }
 
-    public bool IsUnique(string username)
+    public bool Exists(string username)
     {
-        return _db.Users.Any(user =>Normalize(user.UserName) == Normalize(username));
+        return _db.Users.Any(user =>user.UserName.ToLower().Trim() == username.ToLower().Trim());
     }
-
-    private string Normalize(string str) => str.ToLower().Trim();
 
     public async Task<UserLogingResponseDto> Login(UserLoginDto userLoginDto)
     {

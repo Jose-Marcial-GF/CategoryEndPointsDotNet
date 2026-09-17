@@ -8,7 +8,7 @@ public interface IUserRepository
 {
     ICollection<User> GetUSers();
     User? GetUSer(int id);
-    bool IsUnique(string username);
+    bool Exists(string username);
     Task<UserLogingResponseDto> Login(UserLoginDto userLoginDto);
 
     Task<User> Register (CreateUserDto createUserDto);
