@@ -25,7 +25,6 @@
     <Folder Include="Controllers\" />
     <Folder Include="Mapping\" />
     <Folder Include="Model\Dtos\" />
-    <Folder Include="Repository\" />
     <Folder Include="Repository\IRepository\" />
   </ItemGroup>
 
