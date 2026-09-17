@@ -1,14 +1,17 @@
 using System.Reflection.Metadata.Ecma335;
+using ApiEcommerce.Constants;
 using ApiEcommerce.Model;
 using ApiEcommerce.Model.Dtos;
 using ApiEcommerce.Repository.IRepository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiEcommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.Admin)]
     public class ProductsController : ControllerBase
     {
         public readonly IProductRepository _productRepository;
@@ -23,6 +26,7 @@ namespace ApiEcommerce.Controllers
 
 
 
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -33,7 +37,7 @@ namespace ApiEcommerce.Controllers
 
         
 
-
+        [AllowAnonymous]
         [HttpGet("{productId:int}", Name="GetProduct")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -47,7 +51,7 @@ namespace ApiEcommerce.Controllers
             return Ok(_mapper.Map<ProductDto>(product));
         }
 
-
+        [AllowAnonymous]
         [HttpGet("SearchProductByCategoy/{categroyId:int}", Name="GetProductsForCategory")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -61,6 +65,7 @@ namespace ApiEcommerce.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet("SearchProductByNameDescription/{searchTerm}", Name="GetProductsByName")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

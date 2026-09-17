@@ -4,11 +4,14 @@ using ApiEcommerce.Repository.IRepository;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using ApiEcommerce.Constants;
 
 namespace ApiEcommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.Admin)]
     public class UserController : ControllerBase{
     public readonly IMapper _mapper;
     public readonly IUserRepository _userRepository;
@@ -45,7 +48,7 @@ namespace ApiEcommerce.Controllers
             return Ok(_mapper.Map<UserDto>(user));
         }
 
-
+        [AllowAnonymous]
         [HttpPost(Name = "RegisterUser")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -73,7 +76,7 @@ namespace ApiEcommerce.Controllers
             return CreatedAtRoute("GetUser", new {id = user.Id}, user);
         }
 
-        
+        [AllowAnonymous]
         [HttpPost("Login", Name = "LoginUser")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
