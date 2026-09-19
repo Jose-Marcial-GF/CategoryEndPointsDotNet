@@ -10,5 +10,5 @@ public class Category
 
     [Required]
     public DateTime CreatedAt  { get; set; }
-
+    public DateTime CreationDate { get; internal set; }
 }

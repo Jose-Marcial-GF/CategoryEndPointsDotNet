@@ -2,6 +2,7 @@ using System.Reflection.Metadata.Ecma335;
 using ApiEcommerce.Constants;
 using ApiEcommerce.Model;
 using ApiEcommerce.Model.Dtos;
+using ApiEcommerce.Model.Dtos.Responses;
 using ApiEcommerce.Repository.IRepository;
 using Asp.Versioning;
 using AutoMapper;
@@ -51,6 +52,33 @@ namespace ApiEcommerce.Controllers
                 return NotFound($"El producto con id {productId} no existe");
            }
             return Ok(_mapper.Map<ProductDto>(product));
+        }
+
+
+        
+        [AllowAnonymous]
+        [HttpGet("paged", Name="GetProductsInPage")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult GetProductsInPage([FromQuery] int pageNumber=1, [FromQuery] int pageSize=5)
+        {
+            if(pageNumber < 1 || pageSize < 1)
+            {
+                return BadRequest("wrong paged parameters");
+            }
+            int total_products = _productRepository.GetTotalProducts();
+            int Totalpages = (int)Math.Ceiling(((double)total_products/pageSize));
+            if (pageNumber > Totalpages)
+            {
+                return NotFound("page out of bounds");
+            }
+            return Ok(new PaginationResponse<ProductDto>{
+               PageNumber = pageNumber,
+               PageSize = pageSize,
+               TotalPages = Totalpages,
+               Items = _mapper.Map<List<ProductDto>>(_productRepository.GetProductsInPages(pageNumber, pageSize))
+            });
+
         }
 
         [AllowAnonymous]

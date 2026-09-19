@@ -33,12 +33,12 @@ public class UserRepository : IUserRepository
 
     public ApplicationUser? GetUSer(string id)
     {
-        return _db.ApplicationsUsers.FirstOrDefault(user => user.Id == id);
+        return _db.ApplicationUsers.FirstOrDefault(user => user.Id == id);
     }
 
     public ICollection<ApplicationUser> GetUSers()
     {
-        return _db.ApplicationsUsers.OrderBy(user => user.Name).ToList();
+        return _db.ApplicationUsers.OrderBy(user => user.Name).ToList();
     }
 
     public bool Exists(string username)
@@ -57,7 +57,7 @@ public class UserRepository : IUserRepository
                  Message = "El username es requerido"
             };
         }
-        ApplicationUser? user = await _db.ApplicationsUsers.FirstOrDefaultAsync(user => user.UserName != null && user.UserName.ToLower().Trim() == userLoginDto.UserName.ToLower().Trim());
+        ApplicationUser? user = await _db.ApplicationUsers.FirstOrDefaultAsync(user => user.UserName != null && user.UserName.ToLower().Trim() == userLoginDto.UserName.ToLower().Trim());
         if (user == null)
         {
             return new UserLogingResponseDto()
@@ -145,7 +145,7 @@ public class UserRepository : IUserRepository
                 await _roleManager.CreateAsync(identityRole);
             }
             await _userManager.AddToRoleAsync(user, userRole);
-            var createdUser = _db.ApplicationsUsers.FirstOrDefault(user => user.UserName == createUserDto.UserName);
+            var createdUser = _db.ApplicationUsers.FirstOrDefault(user => user.UserName == createUserDto.UserName);
             return _mapper.Map<UserDataDto>(createdUser);
         }
         var errors = string.Join(", ", result.Errors.Select(e => e.Description));

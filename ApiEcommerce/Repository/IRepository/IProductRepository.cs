@@ -7,6 +7,8 @@ public interface IProductRepository
 {
 
     ICollection<Product> GetProducts();
+    ICollection<Product> GetProductsInPages(int pageNumber, int pageSize);
+    int GetTotalProducts();
     ICollection<Product> GetProductsForCategory(int id);
 
     ICollection<Product> SearchProducts(string searchTerm);

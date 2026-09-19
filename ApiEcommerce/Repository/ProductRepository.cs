@@ -79,11 +79,7 @@ public class ProductRepository : IProductRepository
 
     public Product? GetProduct(int id)
     {
-        if( id <= 0)
-        {
-            return null;
-        }
-        return _db.Products.Include(product => product.Category).FirstOrDefault(product => product.Id == id);
+        return id <= 0 ? null : _db.Products.Include(product => product.Category).FirstOrDefault(product => product.Id == id);
     }
 
     public ICollection<Product> GetProducts()
@@ -94,12 +90,19 @@ public class ProductRepository : IProductRepository
 
     public ICollection<Product> GetProductsForCategory(int categoryId)
     {
-        if (categoryId <= 0)
-        {
-            return new List<Product>();
-        }
-        return _db.Products.Include(product => product.Category).Where(product => product.CategoryId == categoryId).OrderBy(product => product.Name).ToList<Product>();
+        return categoryId <= 0
+            ? []
+            : _db.Products.Include(product => product.Category).Where(product => product.CategoryId == categoryId).OrderBy(product => product.Name).ToList();
+    }
 
+    public ICollection<Product> GetProductsInPages(int pageNumber, int pageSize)
+    {
+        return _db.Products.OrderBy(product => product.Id).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+    }
+
+    public int GetTotalProducts()
+    {
+        return _db.Products.Count();
     }
 
     public bool Save()

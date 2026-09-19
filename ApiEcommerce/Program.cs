@@ -1,5 +1,6 @@
 using System.Text;
 using ApiEcommerce.Constants;
+using ApiEcommerce.Data;
 using ApiEcommerce.Migrations;
 using ApiEcommerce.Model;
 using ApiEcommerce.Repository;
@@ -13,8 +14,18 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSql"))); 
+string? connectionString = builder.Configuration.GetConnectionString("ConexionSql");
+
+// Add services to the container.connectionStringconnectionString
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+  options.UseSqlServer(connectionString)
+  .UseSeeding((context, _) =>
+  {
+    var appContext = (ApplicationDbContext)context;
+    DataSeeder.SeedData(appContext);
+    appContext.SaveChanges();
+  })
+);
 
 builder.Services.AddResponseCaching(options  =>
 {
