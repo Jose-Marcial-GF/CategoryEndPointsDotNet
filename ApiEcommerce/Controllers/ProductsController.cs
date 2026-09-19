@@ -5,7 +5,7 @@ using ApiEcommerce.Model.Dtos;
 using ApiEcommerce.Model.Dtos.Responses;
 using ApiEcommerce.Repository.IRepository;
 using Asp.Versioning;
-using AutoMapper;
+using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +19,7 @@ namespace ApiEcommerce.Controllers
     {
         public readonly IProductRepository _productRepository;
         public readonly ICategoryRepository _categoryRepository;
-        public readonly IMapper  _mapper;
+        public readonly IMapper _mapper;
         public ProductsController(IProductRepository productRepository, ICategoryRepository categoryRepository, IMapper mapper)
         {
             _productRepository = productRepository;
@@ -35,7 +35,7 @@ namespace ApiEcommerce.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult GetProducts()
         {
-            return Ok(_productRepository.GetProducts().Select(_mapper.Map<ProductDto>).ToList());
+            return Ok(_productRepository.GetProducts().Select(product => _mapper.Map<ProductDto>(product)).ToList());
         }
 
         
@@ -148,7 +148,7 @@ namespace ApiEcommerce.Controllers
                 return StatusCode(500, ModelState);
             }
             ProductDto productDto = _mapper.Map<ProductDto>(_productRepository.GetProduct(product.Id));
-            return CreatedAtRoute("GetProduct", new {productId = product.Id}, _mapper.Map<ProductDto>(productDto));
+            return CreatedAtRoute("GetProduct", new {productId = product.Id}, productDto);
         }
 
 

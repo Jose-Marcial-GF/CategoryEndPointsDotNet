@@ -7,7 +7,7 @@ using ApiEcommerce.Constants;
 using ApiEcommerce.Migrations;
 using ApiEcommerce.Model;
 using ApiEcommerce.Model.Dtos;
-using AutoMapper;
+using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
