@@ -32,17 +32,17 @@ namespace ApiEcommerce.Controllers
             return Ok(_mapper.Map<List<UserDto>>(_userRepository.GetUSers()));  
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetUser(int id)
+        public IActionResult GetUser(string id)
         {
-            if (id <= 0)
+            if (string.IsNullOrEmpty(id))
             {
-                ModelState.AddModelError("CustomError", "El id tiene que ser >= 0");
+                ModelState.AddModelError("CustomError", "El id tiene que existir");
                 return BadRequest(ModelState);
             }
-            User? user = _userRepository.GetUSer(id);
+            ApplicationUser? user = _userRepository.GetUSer(id);
             if (user == null)
             {
                 return NotFound("User not foud");
@@ -70,7 +70,7 @@ namespace ApiEcommerce.Controllers
             {
                 return BadRequest("the user already exists");
             }
-            User user = await _userRepository.Register(createUserDto);
+            UserDataDto user = await _userRepository.Register(createUserDto);
             if (user == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
